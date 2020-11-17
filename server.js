@@ -10,10 +10,11 @@ Create Server.js file
 const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const PORT = process.env.PORT || 3000;
 
-const db = require("./Develop");
+const db = require("./models");
 
 const app = express();
 
@@ -31,60 +32,32 @@ const opts = {
     useFindAndModify: false
 }
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/populatedb", opts);
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", opts);
 
-// Create a workout
-db.User.create({ name: "Terry Crews" })
-    .then(dbUser => {
-        console.log(dbUser);
-    })
-    .catch(({ message }) => {
-        console.log(message);
-    });
 
 app.get("/", (req, res) => {
-    db.Note.find({})
-    .then(dbNote => {
-        res.json(dbNote);
-    })
-    .catch(err => {
-        res.json(dbUser);
-    });
+    res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
-// Track a workout
-app.get("/user", (req, res) => {
-    db.User.find({})
-        .then(dbUser => {
-            res.json(dbUser);
-        }) 
-        .catch(err => {
-            res.json(err);
-        });
+app.get("/exercise", (req, res) => {
+    res.sendFile(path.join(__dirname, "public/exercise.html"));
 });
 
-// Submit information
-app.post("/submit", ({ body}, res) => {
-    db.Note.create(body)
-    .then(({ _id }) => db.User.findOneandUpdate({}, { $push: { notes: _id }}, {new: true}))
-    .then(dbUser => {
-        res.join(dbUser);
-    })
-    .catch(err => {
+app.get("/stats", (req, res) => {
+    res.sendFile(path.join(__dirname, "public/stats.html"));
+});
+
+app.get("/api/workouts", (req, res) => {
+    db.Workout.find({})
+      .then(dbBook => {
+        res.json(dbBook);
+      })
+      .catch(err => {
         res.json(err);
-    });
-});
-// populate information
-app.get("/", (req, res) => {
-    db.User.find({})
-    .populate("----")
-    .then(dbUser => {
-        res.join(dbUser);
-    })
-    .catch(err => {
-        res.join(err);
-    });
-});
+      });
+  });
+
+  
 
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}!`);
