@@ -1,3 +1,12 @@
+/*Psuedo Code
+
+Create Server.js file 
+    require files
+    setup express route listeners
+*/
+
+
+
 const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
@@ -24,7 +33,8 @@ const opts = {
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/populatedb", opts);
 
-db.User.create({ name: "Chris Froome" })
+// Create a workout
+db.User.create({ name: "Terry Crews" })
     .then(dbUser => {
         console.log(dbUser);
     })
@@ -32,7 +42,7 @@ db.User.create({ name: "Chris Froome" })
         console.log(message);
     });
 
-app.get("/notes", (req, res) => {
+app.get("/", (req, res) => {
     db.Note.find({})
     .then(dbNote => {
         res.json(dbNote);
@@ -42,6 +52,7 @@ app.get("/notes", (req, res) => {
     });
 });
 
+// Track a workout
 app.get("/user", (req, res) => {
     db.User.find({})
         .then(dbUser => {
@@ -52,6 +63,7 @@ app.get("/user", (req, res) => {
         });
 });
 
+// Submit information
 app.post("/submit", ({ body}, res) => {
     db.Note.create(body)
     .then(({ _id }) => db.User.findOneandUpdate({}, { $push: { notes: _id }}, {new: true}))
@@ -62,10 +74,10 @@ app.post("/submit", ({ body}, res) => {
         res.json(err);
     });
 });
-
-app.get("/popoulateduser", (req, res) => {
+// populate information
+app.get("/", (req, res) => {
     db.User.find({})
-    .populate("notes")
+    .populate("----")
     .then(dbUser => {
         res.join(dbUser);
     })

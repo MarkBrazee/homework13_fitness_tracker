@@ -1,28 +1,19 @@
 {
-  "name": "homework13_fitness_tracker",
+  "name": "mongoose_skeleton",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "watch": "nodemon server.js",
+    "seed": "node seeders/seed.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MarkBrazee/homework13_fitness_tracker.git"
-  },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/MarkBrazee/homework13_fitness_tracker/issues"
-  },
-  "homepage": "https://github.com/MarkBrazee/homework13_fitness_tracker#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "mongoose": "^5.10.15",
-    "moongoose": "0.0.5",
-    "morgan": "^1.10.0"
-  },
-  "devDependencies": {}
+    "express": "^4.16.3",
+    "mongoose": "^5.3.16",
+    "morgan": "^1.9.1"
+  }
 }
