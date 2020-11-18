@@ -49,7 +49,7 @@ app.get("/stats", (req, res) => {
 
 app.post("/api/workouts/", ({body}, res) => {
     db.Workout.create(body)
-      .then(({_id}) => db.Workout.findOneAndUpdate({}, { $push: { books: _id } }, { new: true }))
+      .then(({_id}) => db.Workout.findOneAndUpdate({}, { $push: { Workout: _id } }, { new: true }))
       .then(dbWorkout => {
         res.json(dbWorkout);
       })
@@ -68,7 +68,21 @@ app.get("/api/workouts", (req, res) => {
     });
 });
 
+app.get("/api/workouts/range", ({body}, res) => {
+    db.Workout.find(body)
+      .then(({_id}) => db.Workout.findOneAndUpdate({}, { $push: { Workout: _id } }, { new: true }))
+      .then(dbWorkout => {
+        res.json(dbWorkout);
+      })
+      .catch(err => {
+        res.json(err);
+    });
+});
+
 
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}!`);
 });
+
+
+// Continuing to work on create, post and get routes.
