@@ -47,17 +47,27 @@ app.get("/stats", (req, res) => {
     res.sendFile(path.join(__dirname, "public/stats.html"));
 });
 
-app.get("/api/workouts", (req, res) => {
-    db.Workout.find({})
-      .then(dbBook => {
-        res.json(dbBook);
+app.post("/api/workouts/", ({body}, res) => {
+    db.Workout.create(body)
+      .then(({_id}) => db.Workout.findOneAndUpdate({}, { $push: { books: _id } }, { new: true }))
+      .then(dbWorkout => {
+        res.json(dbWorkout);
       })
       .catch(err => {
         res.json(err);
-      });
-  });
+    });
+});
 
-  
+app.get("/api/workouts", (req, res) => {
+    db.Workout.find({})
+      .then(dbWorkout => {
+        res.json(dbWorkout);
+      })
+      .catch(err => {
+        res.json(err);
+    });
+});
+
 
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}!`);
